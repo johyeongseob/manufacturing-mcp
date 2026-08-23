@@ -1,0 +1,2 @@
+# manufacture-mcp
+description
