@@ -1,6 +1,6 @@
 # Manufacturing MCP
 
-제조 설비의 원본 관측값을 조회하고 고장 통계와 경향을 분석하는 **MCP(Model Context Protocol) 기반 AI Agent** 프로젝트입니다. 사용자의 질문을 분류하여 원본 데이터가 필요하면 PostgreSQL MCP Tool을, 통계적 분석이 필요하면 리포트 RAG를 사용합니다.
+제조 설비의 원본 관측값을 조회하고 고장 통계와 경향을 분석하는 AI Agent 프로젝트입니다. 질문에 따라 **PostgreSQL MCP Tool**로 원본 데이터를 조회하거나, **임베딩 기반 RAG**로 분석 리포트를 검색하여 답변합니다.
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)
@@ -9,6 +9,14 @@
 ![MCP](https://img.shields.io/badge/MCP-Server-5A67D8)
 ![LangGraph](https://img.shields.io/badge/LangGraph-Workflow-1C3C3C?logo=langchain&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--5--mini-412991?logo=openai&logoColor=white)
+
+
+## Demo
+
+![Manufacturing MCP 웹 데모](assets/Manufacturing_Intelligence_demo.gif)
+
+원본 설비 데이터에 관한 질문은 **MCP·PostgreSQL**, 통계와 경향에 관한 질문은 **임베딩 기반 RAG**로 처리됩니다.
+
 
 ## 핵심 기능
 
@@ -31,19 +39,6 @@
 ```
 
 통계 리포트는 실시간 질문 이전에 `PostgreSQL → Python 통계 → LangGraph → Markdown 리포트 → 임베딩 인덱스` 순서로 준비합니다. 구성 요소와 데이터 흐름은 [아키텍처 문서](docs/architecture.md)에서 자세히 설명합니다.
-
-## Demo
-
-![Manufacturing MCP 웹 데모](assets/Manufacturing_Intelligence_demo.gif)
-
-원본 설비 데이터에 관한 질문은 **MCP·PostgreSQL**, 통계와 경향에 관한 질문은 **임베딩 기반 RAG**로 처리됩니다.
-
-```bash
-docker compose up -d postgres
-python -m uvicorn manufacturing_mcp.api.app:app
-```
-
-서버 실행 후 [http://127.0.0.1:8000](http://127.0.0.1:8000)에 접속합니다.
 
 ## 데이터셋
 
