@@ -13,9 +13,9 @@
 
 ## Demo
 
-![Manufacturing MCP 웹 데모](assets/Manufacturing_Intelligence_demo.gif)
-
 원본 설비 데이터에 관한 질문은 **MCP·PostgreSQL**, 통계와 경향에 관한 질문은 **임베딩 기반 RAG**로 처리됩니다.
+
+![Manufacturing MCP 웹 데모](assets/Manufacturing_Intelligence_demo.gif)
 
 
 ## 핵심 기능
