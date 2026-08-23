@@ -1,0 +1,12 @@
+# Environment variables and local secrets
+.env
+
+# Python virtual environment
+mcp/
+
+# Python bytecode and cache files
+__pycache__/
+*.py[cod]
+
+# Pytest cache
+.pytest_cache/
