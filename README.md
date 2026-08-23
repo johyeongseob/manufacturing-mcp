@@ -2,6 +2,8 @@
 
 제조 설비 데이터를 탐색하고 고장 위험을 분석하는 MCP(Model Context Protocol) 기반 AI Agent 프로젝트입니다.
 
+사용한 stack 이름과 심볼로 표시
+
 ## DEMO
 
 데모 웹서버 만들기

@@ -24,3 +24,6 @@ dist/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+
+
+assets/Manufacturing_Intelligence_demo.mp4

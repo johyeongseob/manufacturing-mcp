@@ -4,6 +4,13 @@ const sendButton = document.querySelector("#send-button");
 const messages = document.querySelector("#messages");
 const clearButton = document.querySelector("#clear-chat");
 const welcomeMessage = document.querySelector(".welcome-message");
+const architectureNodes = [...document.querySelectorAll("[data-stage]")];
+
+function setArchitectureStage(stage) {
+  architectureNodes.forEach((node) => {
+    node.classList.toggle("active", Number(node.dataset.stage) === stage);
+  });
+}
 
 function scrollToLatest() {
   messages.scrollTo({ top: messages.scrollHeight, behavior: "smooth" });
@@ -166,6 +173,8 @@ async function askQuestion(question) {
   appendUserMessage(question);
   const loadingMessage = appendLoadingMessage();
   setLoading(true);
+  setArchitectureStage(1);
+  const backendStageTimer = window.setTimeout(() => setArchitectureStage(2), 700);
 
   try {
     const response = await fetch("/chat", {
@@ -178,11 +187,15 @@ async function askQuestion(question) {
     if (!response.ok) {
       throw new Error(payload.detail ?? "요청을 처리하지 못했습니다.");
     }
+    setArchitectureStage(2);
     appendAnswer(payload.answer, payload.route);
   } catch (error) {
     loadingMessage.remove();
+    setArchitectureStage(1);
     appendError(error.message || "서버 연결을 확인해 주세요.");
   } finally {
+    window.clearTimeout(backendStageTimer);
+    setArchitectureStage(-1);
     setLoading(false);
     questionInput.focus();
   }
@@ -205,6 +218,9 @@ questionInput.addEventListener("keydown", (event) => {
 });
 
 questionInput.addEventListener("input", () => {
+  if (!questionInput.disabled) {
+    setArchitectureStage(questionInput.value.trim() ? 0 : -1);
+  }
   questionInput.style.height = "auto";
   questionInput.style.height = `${Math.min(questionInput.scrollHeight, 130)}px`;
 });
@@ -219,5 +235,6 @@ document.querySelectorAll("[data-question]").forEach((button) => {
 
 clearButton.addEventListener("click", () => {
   messages.replaceChildren(welcomeMessage.cloneNode(true));
+  setArchitectureStage(-1);
   questionInput.focus();
 });
