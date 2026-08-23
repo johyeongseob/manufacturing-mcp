@@ -13,22 +13,7 @@
 
 ### 주요 컬럼
 
-| 컬럼 | 설명 | 단위 또는 값 |
-| --- | --- | --- |
-| `UDI` | 관측값의 고유 식별자 | 1–10,000 |
-| `Product ID` | 제품 등급 문자와 일련번호로 구성된 제품 식별자 | 예: `M14860` |
-| `Type` | 제품 품질 등급 | `L`(Low), `M`(Medium), `H`(High) |
-| `Air temperature [K]` | 공기 온도 | K |
-| `Process temperature [K]` | 공정 온도 | K |
-| `Rotational speed [rpm]` | 회전 속도 | rpm |
-| `Torque [Nm]` | 토크 | Nm |
-| `Tool wear [min]` | 누적 공구 마모 시간 | min |
-| `Machine failure` | 하나 이상의 고장 유형이 발생했는지 여부 | `0` 또는 `1` |
-| `TWF` | 공구 마모 고장(Tool Wear Failure) 여부 | `0` 또는 `1` |
-| `HDF` | 방열 고장(Heat Dissipation Failure) 여부 | `0` 또는 `1` |
-| `PWF` | 동력 고장(Power Failure) 여부 | `0` 또는 `1` |
-| `OSF` | 과부하 고장(Overstrain Failure) 여부 | `0` 또는 `1` |
-| `RNF` | 무작위 고장(Random Failure) 여부 | `0` 또는 `1` |
+각 컬럼의 의미와 단위는 [데이터셋 컬럼 문서](docs/dataset.md)에서 확인할 수 있습니다.
 
 ### 데이터 샘플
 
@@ -40,8 +25,59 @@
 | 2 | L47181 | L | 298.2 | 308.7 | 1408 | 46.3 | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 3 | L47182 | L | 298.1 | 308.5 | 1498 | 49.4 | 5 | 0 | 0 | 0 | 0 | 0 | 0 |
 
+## 개발 환경 구성
+
+이 프로젝트는 Python 3.12 이상을 사용합니다. WSL Ubuntu 24.04의 프로젝트 루트에서 가상환경을 활성화하고 개발 의존성을 설치합니다.
+
+```bash
+source mcp/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+`.env.example`을 참고해 로컬 `.env` 파일을 작성합니다. 실제 API Key가 들어 있는 `.env`는 Git에 포함되지 않습니다.
+
+```bash
+cp -n .env.example .env
+chmod 600 .env
+```
+
+코드 변경 후 테스트, 린트, 포맷 검사를 실행합니다.
+
+```bash
+pytest
+ruff check .
+ruff format --check .
+```
+
+현재 Python 패키지는 `src/manufacturing_mcp`에, 테스트는 `tests`에 위치합니다. 애플리케이션 설정은 `src/manufacturing_mcp/config.py`에서 환경변수와 `.env` 파일로부터 불러옵니다.
+
+## PostgreSQL 실행
+
+Docker Compose로 PostgreSQL 컨테이너를 백그라운드에서 실행합니다.
+
+```bash
+docker compose up -d postgres
+docker compose ps
+```
+
+`postgres` 서비스의 상태가 `healthy`이면 정상입니다. PostgreSQL에 직접 접속하려면 다음 명령을 사용합니다.
+
+```bash
+docker compose exec postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
+```
+
+접속을 종료하려면 `\q`를 입력합니다. 컨테이너를 중지할 때는 다음 명령을 사용합니다.
+
+```bash
+docker compose down
+```
+
+PostgreSQL 데이터는 `postgres_data` Docker 볼륨에 보존되므로 컨테이너를 중지하거나 다시 만들어도 유지됩니다.
+
 ## 출처 및 저작권
 
+- 프로젝트 코드: Copyright © 2026 Johyeongseob. [MIT License](LICENSE)에 따라 배포됩니다.
 - 데이터셋: *AI4I 2020 Predictive Maintenance Dataset* (2020), UCI Machine Learning Repository, [https://doi.org/10.24432/C5HS5C](https://doi.org/10.24432/C5HS5C)
 - 관련 논문: Stephan Matzka, “Explainable Artificial Intelligence for Predictive Maintenance Applications,” *2020 Third International Conference on Artificial Intelligence for Industries (AI4I)*, pp. 69–74, [https://doi.org/10.1109/AI4I49448.2020.00023](https://doi.org/10.1109/AI4I49448.2020.00023)
 - 데이터셋 라이선스: [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). 데이터셋의 공유 및 수정은 허용되며, 사용 시 원저작자와 출처를 적절히 표시해야 합니다.
