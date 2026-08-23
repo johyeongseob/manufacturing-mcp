@@ -36,6 +36,13 @@ class ObservationRepository:
         result = await self._session.execute(statement)
         return result.scalar_one_or_none()
 
+    async def list_all(self) -> list[Observation]:
+        """Return every observation in UDI order for offline analysis."""
+
+        statement = select(Observation).order_by(Observation.udi)
+        result = await self._session.execute(statement)
+        return list(result.scalars().all())
+
     async def search(
         self,
         *,

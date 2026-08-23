@@ -35,6 +35,20 @@ async def test_get_by_udi_builds_single_observation_query() -> None:
     assert "WHERE observations.udi = 1" in sql
 
 
+async def test_list_all_orders_observations_by_udi() -> None:
+    session = AsyncMock(spec=AsyncSession)
+    result = MagicMock()
+    result.scalars.return_value.all.return_value = [Observation(udi=1), Observation(udi=2)]
+    session.execute.return_value = result
+
+    returned = await ObservationRepository(session).list_all()
+
+    assert [observation.udi for observation in returned] == [1, 2]
+    sql = compile_sql(session.execute.await_args.args[0])
+    assert "ORDER BY observations.udi" in sql
+    assert "LIMIT" not in sql
+
+
 async def test_search_applies_filters_order_and_limit() -> None:
     session = AsyncMock(spec=AsyncSession)
     result = MagicMock()

@@ -51,26 +51,7 @@ data/ai4i2020.csv
 
 현재 데이터베이스에는 전체 관측값 10,000개가 저장되어 있으며, 고장 없음 9,661개와 고장 발생 339개로 구성됩니다.
 
-PostgreSQL 실행부터 데이터 적재까지 다음 순서로 진행합니다.
-
-```bash
-# PostgreSQL 실행 및 상태 확인
-docker compose up -d postgres
-docker compose ps
-
-# observations 테이블 생성 또는 갱신
-alembic upgrade head
-
-# CSV 데이터 적재
-python -m manufacturing_mcp.pipeline.load_dataset
-
-# 적재 결과 확인
-docker compose exec postgres \
-  psql -U manufacturing -d manufacturing \
-  -c "SELECT COUNT(*) FROM observations;"
-```
-
-데이터베이스 구성과 조회 방법은 [PostgreSQL 문서](docs/postgres.md), `observations` 컬럼의 의미는 [데이터셋 문서](docs/dataset.md)를 참고합니다.
+PostgreSQL 실행, 마이그레이션, CSV 적재 및 데이터 조회 방법은 [PostgreSQL 문서](docs/postgres.md), `observations` 컬럼의 의미는 [데이터셋 문서](docs/dataset.md)를 참고합니다.
 
 ## 출처 및 저작권
 

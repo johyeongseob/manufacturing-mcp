@@ -19,12 +19,6 @@
 - `alembic_version`: 적용된 마이그레이션 버전 기록
 - `observations`: 제조 설비 관측값 저장
 
-마이그레이션 적용 명령:
-
-```bash
-alembic upgrade head
-```
-
 `observations`는 `udi`를 기본키로 사용하며, 제품 유형과 고장 여부를 위한 제약조건 및 인덱스를 포함합니다.
 
 ## 적재 결과
@@ -35,26 +29,38 @@ alembic upgrade head
 | 고장 없음 | 9,661 |
 | 고장 발생 | 339 |
 
-## 주요 명령
+## 실행 및 데이터 적재
+
+PostgreSQL 실행부터 데이터 적재까지 다음 순서로 진행합니다.
 
 ```bash
-# PostgreSQL 실행
+# PostgreSQL 실행 및 상태 확인
 docker compose up -d postgres
-
-# 실행 상태 확인
 docker compose ps
 
+# observations 테이블 생성 또는 갱신
+alembic upgrade head
+
+# CSV 데이터 적재
+python -m manufacturing_mcp.pipeline.load_dataset
+
+# 적재 결과 확인
+docker compose exec postgres \
+  psql -U manufacturing -d manufacturing \
+  -c "SELECT COUNT(*) FROM observations;"
+```
+
+`docker compose ps`에서 `postgres` 서비스가 `healthy`이면 정상입니다. CSV 로더는 UDI를 기준으로 기존 행을 갱신하므로 다시 실행해도 중복 행을 생성하지 않습니다.
+
+PostgreSQL에 직접 접속하거나 컨테이너를 중지하려면 다음 명령을 사용합니다.
+
+```bash
 # PostgreSQL 접속
 docker compose exec postgres psql -U manufacturing -d manufacturing
-
-# CSV 적재
-python -m manufacturing_mcp.pipeline.load_dataset
 
 # 컨테이너 중지
 docker compose down
 ```
-
-`docker compose ps`에서 `postgres` 서비스가 `healthy`이면 정상입니다. CSV 로더는 UDI를 기준으로 기존 행을 갱신하므로 다시 실행해도 중복 행을 생성하지 않습니다.
 
 
 ## 확인 결과
