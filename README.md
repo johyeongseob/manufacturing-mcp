@@ -20,12 +20,12 @@
 
 ## 핵심 기능
 
-- **원본 데이터 조회:** MCP Tool이 PostgreSQL의 설비 관측값을 UDI 또는 조건으로 조회합니다.
-- **통계 계산:** Python과 SQLAlchemy로 전체 고장률, 제품 등급별 고장률, 공구 마모 구간별 고장률과 고장 유형을 계산합니다.
-- **리포트 생성:** LangGraph가 검증된 통계를 바탕으로 세 종류의 분석 리포트를 병렬 생성합니다.
-- **RAG 질의응답:** 리포트를 섹션 단위로 나누고 `text-embedding-3-small`로 미리 임베딩하여 관련 내용을 검색합니다.
-- **통합 라우팅:** 질문 유형에 따라 PostgreSQL MCP 또는 리포트 RAG를 자동 선택합니다.
-- **웹 데모:** FastAPI `/chat` API와 HTML·CSS·JavaScript 화면에서 전체 흐름을 실습할 수 있습니다.
+- **원본 데이터 조회:** MCP Tool이 PostgreSQL의 설비 관측값을 UDI 또는 조건으로 조회
+- **통계 계산:** Python과 SQLAlchemy로 전체 고장률, 제품 등급별 고장률, 공구 마모 구간별 고장률과 고장 유형을 계산
+- **리포트 생성:** LangGraph가 검증된 통계를 바탕으로 세 종류의 분석 리포트를 병렬 생성
+- **RAG 질의응답:** 리포트를 섹션 단위로 나누고 `text-embedding-3-small`로 미리 임베딩하여 관련 내용을 검색
+- **통합 라우팅:** 질문 유형에 따라 PostgreSQL MCP 또는 리포트 RAG를 자동 선택
+- **웹 데모:** FastAPI `/chat` API와 HTML·CSS·JavaScript 화면에서 전체 흐름을 실습
 
 ## 동작 구조
 
