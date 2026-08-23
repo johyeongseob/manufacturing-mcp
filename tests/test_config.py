@@ -11,6 +11,7 @@ def test_settings_have_safe_defaults(monkeypatch) -> None:
     assert settings.app_env == "development"
     assert settings.log_level == "INFO"
     assert settings.openai_model == "gpt-5-mini"
+    assert settings.openai_embedding_model == "text-embedding-3-small"
     assert settings.openai_api_key is None
     assert settings.database_url.startswith("postgresql+asyncpg://")
 
